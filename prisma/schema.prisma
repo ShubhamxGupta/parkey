@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum VehicleType {
+  Car
+  Bike
+  EV
+  Handicap
+}
+
+enum SlotType {
+  Regular
+  Compact
+  EV
+  Handicap
+}
+
+enum SlotStatus {
+  Available
+  Occupied
+  Maintenance
+}
+
+enum SessionStatus {
+  Active
+  Completed
+}
+
+enum BillingType {
+  Hourly
+  DayPass
+}
+
+model Vehicle {
+  id           String   @id @default(cuid())
+  numberPlate  String   @unique
+  vehicleType  VehicleType
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  parkingSessions ParkingSession[]
+
+  @@map("vehicles")
+}
+
+model ParkingSlot {
+  id         String     @id @default(cuid())
+  slotNumber String     @unique
+  slotType   SlotType
+  status     SlotStatus @default(Available)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  // Relations
+  parkingSessions ParkingSession[]
+
+  @@map("parking_slots")
+}
+
+model ParkingSession {
+  id                String        @id @default(cuid())
+  vehicleNumberPlate String
+  slotId            String
+  entryTime         DateTime      @default(now())
+  exitTime          DateTime?
+  status            SessionStatus @default(Active)
+  billingType       BillingType
+  billingAmount     Float?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  // Relations
+  vehicle Vehicle     @relation(fields: [vehicleNumberPlate], references: [numberPlate], onDelete: Cascade)
+  slot    ParkingSlot @relation(fields: [slotId], references: [id], onDelete: Cascade)
+
+  @@map("parking_sessions")
+}
+
+model Operator {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  password  String
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("operators")
+}
