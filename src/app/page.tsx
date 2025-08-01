@@ -71,7 +71,7 @@ export default function LoginPage() {
           <div className="mx-auto h-24 w-24 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-3xl flex items-center justify-center shadow-2xl transform hover:scale-105 transition-all duration-300 animate-pulse">
             <Building2 className="h-12 w-12 text-white" />
           </div>
-          <h2 className="mt-8 text-5xl font-bold text-white bg-gradient-to-r from-white to-purple-200 bg-clip-text text-transparent">
+          <h2 className="mt-8 text-5xl font-bold text-white bg-gradient-to-r from-white to-purple-200 bg-clip-text">
             Mall Parking
           </h2>
           <p className="mt-3 text-xl text-purple-200 font-medium">
